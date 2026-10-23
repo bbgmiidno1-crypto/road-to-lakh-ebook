@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: road-to-lakh-ebook
+    runtime: node
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PAYMENT_ENABLED
+        value: "false"
+      - key: DELIVERY_ENABLED
+        value: "false"
+      - key: PAYMENT_MODE
+        value: test
+      - key: LIVE_E2E_CONFIRMED
+        value: "false"
+        
