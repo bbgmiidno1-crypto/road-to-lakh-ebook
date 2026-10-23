@@ -1,0 +1,16 @@
+{
+  "productName": "Road to ₹1 Lakh in a Month",
+  "productPrice": 349,
+  "author": "Sujit Singh",
+  "policiesApproved": false,
+  "sellerLegalName": "[CONFIGURE: seller legal name]",
+  "sellerAddress": "[CONFIGURE: business/correspondence address]",
+  "contactEmail": "[CONFIGURE: contact email]",
+  "grievanceContact": "[CONFIGURE: grievance contact and process]",
+  "retentionPolicy": "[CONFIGURE: retention period, deletion and required accounting exceptions]",
+  "refundPolicy": "[CONFIGURE: eligibility, request window, process and processing timeframe]",
+  "licenseTerms": "[CONFIGURE: permitted use and redistribution terms]",
+  "taxStatement": "[CONFIGURE: applicable tax/invoice disclosure; displayed checkout total is ₹349]",
+  "policyEffectiveDate": "[CONFIGURE: effective date]",
+  "deliverySupportTimeframe": "[CONFIGURE: delivery-failure support response timeframe]"
+}
