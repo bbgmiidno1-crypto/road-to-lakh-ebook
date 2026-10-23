@@ -149,13 +149,6 @@ export function makeApp({env=process.env,db=null,fetcher=fetch,mailer=null,signD
   const {job,o,payload}=claimed;
   try{const result=await resend.emails.send(payload,{idempotencyKey:'ebook/'+job.id});if(result.error)throw new Error(result.error.message);const emailID=result.data?.id;if(!emailID)throw new Error('Missing provider email ID');
    await tx(async c=>{await c.query("UPDATE outbox SET state='sent',email_id=$2,last_error=NULL WHERE id=$1",[job.id,emailID]);await c.query("UPDATE orders SET email_id=$2,delivery_state='submitted' WHERE id=$1 AND delivery_version=$3",[o.id,emailID,job.version]);});
-  }catch(e){const manual=job.attempts>=7;await tx(async c=>{await c.query("UPDATE outbox SET state=$2,next_attempt_at=$3,last_error=$4 WHERE id=$1",[job.id,manual?'manual_review':'pending',new Date(now()+5*60000)]);
-   return {job,o,payload};
-  });
-  if(!claimed)return;
-  const {job,o,payload}=claimed;
-  try{const result=await resend.emails.send(payload,{idempotencyKey:'ebook/'+job.id});if(result.error)throw new Error(result.error.message);const emailID=result.data?.id;if(!emailID)throw new Error('Missing provider email ID');
-   await tx(async c=>{await c.query("UPDATE outbox SET state='sent',email_id=$2,last_error=NULL WHERE id=$1",[job.id,emailID]);await c.query("UPDATE orders SET email_id=$2,delivery_state='submitted' WHERE id=$1 AND delivery_version=$3",[o.id,emailID,job.version]);});
   }catch(e){const manual=job.attempts>=7;await tx(async c=>{await c.query("UPDATE outbox SET state=$2,next_attempt_at=$3,last_error=$4 WHERE id=$1",[job.id,manual?'manual_review':'pending',new Date(now()+Math.min(3600000,30000*2**job.attempts)),String(e.message).slice(0,300)]);await c.query('UPDATE orders SET delivery_state=$2 WHERE id=$1 AND delivery_version=$3',[o.id,manual?'manual_review':'retrying',job.version]);});}
   }catch(e){console.error('Delivery worker:',e.message);}finally{working=false;}
  }
